@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Users, User, Mail, Phone, GraduationCap, Hash, Loader2 } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import type { EventConfig } from "@/lib/eventConfig";
 import type { RegistrationFormData } from "@/lib/registrationTypes";
@@ -80,8 +80,6 @@ export default function Register({ config }: RegisterProps) {
   const [teamSize, setTeamSize] = useState<"1" | "2" | "3">("1");
   const [showUpiModal, setShowUpiModal] = useState(false);
   const [upiLink, setUpiLink] = useState("");
-  const [isLoadingQr, setIsLoadingQr] = useState(false);
-  const qrCanvasRef = useRef<HTMLCanvasElement>(null);
 
   const form = useForm<RegistrationFormData>({
     resolver: zodResolver(createFormSchema(teamSize)),
@@ -92,7 +90,6 @@ export default function Register({ config }: RegisterProps) {
 
   const onSubmit = async (data: RegistrationFormData) => {
     try {
-      setIsLoadingQr(true);
       const ticketId = `TKT_${Date.now()}`;
       const payload = {
         ...data,
@@ -118,7 +115,6 @@ export default function Register({ config }: RegisterProps) {
       setUpiLink(link);
       setShowUpiModal(true);
     } catch (error) {
-      setIsLoadingQr(false);
       toast.error("Failed to submit registration. Please try again.");
     }
   };
@@ -133,21 +129,6 @@ export default function Register({ config }: RegisterProps) {
     toast.success("UPI ID copied!");
   };
 
-  // Render QR code when modal opens and upiLink is available
-  useEffect(() => {
-    if (showUpiModal && upiLink && qrCanvasRef.current) {
-      renderQrToCanvas(qrCanvasRef.current, upiLink)
-        .then(() => {
-          setIsLoadingQr(false);
-        })
-        .catch((error) => {
-          console.error("Failed to render QR code:", error);
-          setIsLoadingQr(false);
-          toast.error("Failed to generate QR code. Please try again.");
-        });
-    }
-  }, [showUpiModal, upiLink]);
-
   return (
     <div className="min-h-screen relative overflow-auto">
       <AnimatedBackground />
@@ -161,84 +142,58 @@ export default function Register({ config }: RegisterProps) {
           Back to Event
         </Link>
 
-        <div className="max-w-3xl mx-auto glass-card rounded-2xl p-6 md:p-8">
-          <div className="mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold gradient-text mb-2">{config.eventName}</h1>
-            <p className="text-muted-foreground">Complete the registration form below to secure your spot</p>
-          </div>
+        <div className="max-w-3xl mx-auto glass-card rounded-2xl p-8">
+          <h1 className="text-4xl font-bold gradient-text mb-2">{config.eventName}</h1>
+          <p className="text-muted-foreground mb-8">Registration Form</p>
 
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            {/* Team Information Section */}
-            <div className="space-y-4">
-              <div className="flex items-center gap-2 mb-4">
-                <Users className="w-5 h-5 text-primary" />
-                <h2 className="text-xl font-semibold">Team Information</h2>
-              </div>
-              
-              <div>
-                <Label htmlFor="teamName" className="flex items-center gap-2">
-                  <Hash className="w-4 h-4 text-muted-foreground" />
-                  Team Name *
-                </Label>
-                <Input
-                  id="teamName"
-                  {...form.register("teamName")}
-                  placeholder="Enter your team name"
-                  className="mt-1.5"
-                />
-                {form.formState.errors.teamName && (
-                  <p className="text-destructive text-sm mt-1">
-                    {form.formState.errors.teamName.message}
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <Label className="flex items-center gap-2 mb-3">
-                  <Users className="w-4 h-4 text-muted-foreground" />
-                  Team Size *
-                </Label>
-                <RadioGroup
-                  value={teamSize}
-                  onValueChange={(value: "1" | "2" | "3") => {
-                    setTeamSize(value);
-                    form.setValue("teamSize", value);
-                  }}
-                  className="flex gap-6 mt-2"
-                >
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="1" id="size1" />
-                    <Label htmlFor="size1" className="cursor-pointer font-medium">1 Member</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="2" id="size2" />
-                    <Label htmlFor="size2" className="cursor-pointer font-medium">2 Members</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="3" id="size3" />
-                    <Label htmlFor="size3" className="cursor-pointer font-medium">3 Members</Label>
-                  </div>
-                </RadioGroup>
-              </div>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <div>
+              <Label htmlFor="teamName">Team Name *</Label>
+              <Input
+                id="teamName"
+                {...form.register("teamName")}
+                className="mt-1.5"
+              />
+              {form.formState.errors.teamName && (
+                <p className="text-destructive text-sm mt-1">
+                  {form.formState.errors.teamName.message}
+                </p>
+              )}
             </div>
 
-            {/* Member 1 (Lead) Section */}
+            <div>
+              <Label>Team Size *</Label>
+              <RadioGroup
+                value={teamSize}
+                onValueChange={(value: "1" | "2" | "3") => {
+                  setTeamSize(value);
+                  form.setValue("teamSize", value);
+                }}
+                className="flex gap-4 mt-2"
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="1" id="size1" />
+                  <Label htmlFor="size1">1</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="2" id="size2" />
+                  <Label htmlFor="size2">2</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="3" id="size3" />
+                  <Label htmlFor="size3">3</Label>
+                </div>
+              </RadioGroup>
+            </div>
+
             <div className="border-t border-border pt-6">
-              <div className="flex items-center gap-2 mb-6">
-                <User className="w-5 h-5 text-primary" />
-                <h3 className="text-xl font-semibold">Member 1 (Lead)</h3>
-                <span className="px-2 py-0.5 rounded-full bg-primary/20 text-primary text-xs font-medium">Required</span>
-              </div>
-              <div className="grid md:grid-cols-2 gap-4">
+              <h3 className="text-lg font-semibold mb-4">Member 1 (Lead)</h3>
+              <div className="space-y-4">
                 <div>
-                  <Label htmlFor="member1Name" className="flex items-center gap-2">
-                    <User className="w-4 h-4 text-muted-foreground" />
-                    Full Name *
-                  </Label>
+                  <Label htmlFor="member1Name">Name *</Label>
                   <Input
                     id="member1Name"
                     {...form.register("member1Name")}
-                    placeholder="Enter full name"
                     className="mt-1.5"
                   />
                   {form.formState.errors.member1Name && (
@@ -248,15 +203,11 @@ export default function Register({ config }: RegisterProps) {
                   )}
                 </div>
                 <div>
-                  <Label htmlFor="member1USN" className="flex items-center gap-2">
-                    <Hash className="w-4 h-4 text-muted-foreground" />
-                    USN *
-                  </Label>
+                  <Label htmlFor="member1USN">USN *</Label>
                   <Input
                     id="member1USN"
                     {...form.register("member1USN")}
-                    placeholder="e.g., 4PS23IS065"
-                    className="mt-1.5 uppercase"
+                    className="mt-1.5"
                   />
                   {form.formState.errors.member1USN && (
                     <p className="text-destructive text-sm mt-1">
@@ -264,15 +215,11 @@ export default function Register({ config }: RegisterProps) {
                     </p>
                   )}
                 </div>
-                <div className="md:col-span-2">
-                  <Label htmlFor="collegeName" className="flex items-center gap-2">
-                    <GraduationCap className="w-4 h-4 text-muted-foreground" />
-                    College Name *
-                  </Label>
+                <div>
+                  <Label htmlFor="collegeName">College Name *</Label>
                   <Input
                     id="collegeName"
                     {...form.register("collegeName")}
-                    placeholder="Enter college name"
                     className="mt-1.5"
                   />
                   {form.formState.errors.collegeName && (
@@ -282,16 +229,11 @@ export default function Register({ config }: RegisterProps) {
                   )}
                 </div>
                 <div>
-                  <Label htmlFor="contactNumber" className="flex items-center gap-2">
-                    <Phone className="w-4 h-4 text-muted-foreground" />
-                    Contact Number *
-                  </Label>
+                  <Label htmlFor="contactNumber">Contact Number *</Label>
                   <Input
                     id="contactNumber"
                     type="tel"
                     {...form.register("contactNumber")}
-                    placeholder="10-digit mobile number"
-                    maxLength={10}
                     className="mt-1.5"
                   />
                   {form.formState.errors.contactNumber && (
@@ -301,15 +243,11 @@ export default function Register({ config }: RegisterProps) {
                   )}
                 </div>
                 <div>
-                  <Label htmlFor="emailId" className="flex items-center gap-2">
-                    <Mail className="w-4 h-4 text-muted-foreground" />
-                    Email ID *
-                  </Label>
+                  <Label htmlFor="emailId">Email ID *</Label>
                   <Input
                     id="emailId"
                     type="email"
                     {...form.register("emailId")}
-                    placeholder="your.email@example.com"
                     className="mt-1.5"
                   />
                   {form.formState.errors.emailId && (
@@ -323,21 +261,13 @@ export default function Register({ config }: RegisterProps) {
 
             {(teamSize === "2" || teamSize === "3") && (
               <div className="border-t border-border pt-6">
-                <div className="flex items-center gap-2 mb-6">
-                  <User className="w-5 h-5 text-accent" />
-                  <h3 className="text-xl font-semibold">Member 2</h3>
-                  <span className="px-2 py-0.5 rounded-full bg-accent/20 text-accent text-xs font-medium">Required</span>
-                </div>
-                <div className="grid md:grid-cols-2 gap-4">
+                <h3 className="text-lg font-semibold mb-4">Member 2</h3>
+                <div className="space-y-4">
                   <div>
-                    <Label htmlFor="member2Name" className="flex items-center gap-2">
-                      <User className="w-4 h-4 text-muted-foreground" />
-                      Full Name *
-                    </Label>
+                    <Label htmlFor="member2Name">Name *</Label>
                     <Input
                       id="member2Name"
                       {...form.register("member2Name")}
-                      placeholder="Enter full name"
                       className="mt-1.5"
                     />
                     {form.formState.errors.member2Name && (
@@ -347,53 +277,36 @@ export default function Register({ config }: RegisterProps) {
                     )}
                   </div>
                   <div>
-                    <Label htmlFor="member2USN" className="flex items-center gap-2">
-                      <Hash className="w-4 h-4 text-muted-foreground" />
-                      USN
-                    </Label>
+                    <Label htmlFor="member2USN">USN</Label>
                     <Input
                       id="member2USN"
                       {...form.register("member2USN")}
-                      placeholder="e.g., 4PS23IS065"
-                      className="mt-1.5 uppercase"
-                    />
-                  </div>
-                  <div className="md:col-span-2">
-                    <Label htmlFor="member2College" className="flex items-center gap-2">
-                      <GraduationCap className="w-4 h-4 text-muted-foreground" />
-                      College Name
-                    </Label>
-                    <Input
-                      id="member2College"
-                      {...form.register("member2College")}
-                      placeholder="Enter college name"
                       className="mt-1.5"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="member2Contact" className="flex items-center gap-2">
-                      <Phone className="w-4 h-4 text-muted-foreground" />
-                      Contact Number
-                    </Label>
+                    <Label htmlFor="member2College">College Name</Label>
+                    <Input
+                      id="member2College"
+                      {...form.register("member2College")}
+                      className="mt-1.5"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="member2Contact">Contact Number</Label>
                     <Input
                       id="member2Contact"
                       type="tel"
                       {...form.register("member2Contact")}
-                      placeholder="10-digit mobile number"
-                      maxLength={10}
                       className="mt-1.5"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="member2Email" className="flex items-center gap-2">
-                      <Mail className="w-4 h-4 text-muted-foreground" />
-                      Email ID
-                    </Label>
+                    <Label htmlFor="member2Email">Email ID</Label>
                     <Input
                       id="member2Email"
                       type="email"
                       {...form.register("member2Email")}
-                      placeholder="your.email@example.com"
                       className="mt-1.5"
                     />
                   </div>
@@ -403,21 +316,13 @@ export default function Register({ config }: RegisterProps) {
 
             {teamSize === "3" && (
               <div className="border-t border-border pt-6">
-                <div className="flex items-center gap-2 mb-6">
-                  <User className="w-5 h-5 text-accent" />
-                  <h3 className="text-xl font-semibold">Member 3</h3>
-                  <span className="px-2 py-0.5 rounded-full bg-accent/20 text-accent text-xs font-medium">Required</span>
-                </div>
-                <div className="grid md:grid-cols-2 gap-4">
+                <h3 className="text-lg font-semibold mb-4">Member 3</h3>
+                <div className="space-y-4">
                   <div>
-                    <Label htmlFor="member3Name" className="flex items-center gap-2">
-                      <User className="w-4 h-4 text-muted-foreground" />
-                      Full Name *
-                    </Label>
+                    <Label htmlFor="member3Name">Name *</Label>
                     <Input
                       id="member3Name"
                       {...form.register("member3Name")}
-                      placeholder="Enter full name"
                       className="mt-1.5"
                     />
                     {form.formState.errors.member3Name && (
@@ -427,53 +332,36 @@ export default function Register({ config }: RegisterProps) {
                     )}
                   </div>
                   <div>
-                    <Label htmlFor="member3USN" className="flex items-center gap-2">
-                      <Hash className="w-4 h-4 text-muted-foreground" />
-                      USN
-                    </Label>
+                    <Label htmlFor="member3USN">USN</Label>
                     <Input
                       id="member3USN"
                       {...form.register("member3USN")}
-                      placeholder="e.g., 4PS23IS065"
-                      className="mt-1.5 uppercase"
-                    />
-                  </div>
-                  <div className="md:col-span-2">
-                    <Label htmlFor="member3College" className="flex items-center gap-2">
-                      <GraduationCap className="w-4 h-4 text-muted-foreground" />
-                      College Name
-                    </Label>
-                    <Input
-                      id="member3College"
-                      {...form.register("member3College")}
-                      placeholder="Enter college name"
                       className="mt-1.5"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="member3Contact" className="flex items-center gap-2">
-                      <Phone className="w-4 h-4 text-muted-foreground" />
-                      Contact Number
-                    </Label>
+                    <Label htmlFor="member3College">College Name</Label>
+                    <Input
+                      id="member3College"
+                      {...form.register("member3College")}
+                      className="mt-1.5"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="member3Contact">Contact Number</Label>
                     <Input
                       id="member3Contact"
                       type="tel"
                       {...form.register("member3Contact")}
-                      placeholder="10-digit mobile number"
-                      maxLength={10}
                       className="mt-1.5"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="member3Email" className="flex items-center gap-2">
-                      <Mail className="w-4 h-4 text-muted-foreground" />
-                      Email ID
-                    </Label>
+                    <Label htmlFor="member3Email">Email ID</Label>
                     <Input
                       id="member3Email"
                       type="email"
                       {...form.register("member3Email")}
-                      placeholder="your.email@example.com"
                       className="mt-1.5"
                     />
                   </div>
@@ -481,34 +369,9 @@ export default function Register({ config }: RegisterProps) {
               </div>
             )}
 
-            {/* Payment Section */}
-            <div className="border-t border-border pt-6">
-              <div className="bg-primary/10 rounded-xl p-4 mb-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-muted-foreground">Registration Fee</p>
-                    <p className="text-2xl font-bold text-foreground">₹{config.regFeeInr}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-xs text-muted-foreground">Pay via UPI</p>
-                    <p className="text-sm font-medium text-foreground">{config.payeeName}</p>
-                  </div>
-                </div>
-              </div>
-              <Button type="submit" className="w-full" size="lg" disabled={isLoadingQr || form.formState.isSubmitting}>
-                {isLoadingQr || form.formState.isSubmitting ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    Processing...
-                  </>
-                ) : (
-                  `Pay via UPI (₹${config.regFeeInr})`
-                )}
-              </Button>
-              <p className="text-xs text-center text-muted-foreground mt-3">
-                By submitting, you agree to the event terms and conditions
-              </p>
-            </div>
+            <Button type="submit" className="w-full" size="lg">
+              Pay via UPI (₹{config.regFeeInr})
+            </Button>
           </form>
         </div>
       </div>
@@ -523,7 +386,9 @@ export default function Register({ config }: RegisterProps) {
             </p>
             <div className="flex justify-center my-6">
               <canvas
-                ref={qrCanvasRef}
+                ref={(canvas) => {
+                  if (canvas) renderQrToCanvas(canvas, upiLink);
+                }}
                 className="border-4 border-white rounded-lg"
               />
             </div>

@@ -2,13 +2,11 @@ import gsaLogo from "@/assets/GSA_LOGO.png";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 const PartnerStrip = () => {
-  const currentYear = new Date().getFullYear();
-  
   return (
     <div className="w-full border-t border-border/30 bg-background/80 backdrop-blur-sm py-3">
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-center gap-3">
-          <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
+          <p className="text-[10px] sm:text-xs uppercase tracking-wider text-foreground/90 font-medium">
             Partner
           </p>
           <TooltipProvider>
@@ -18,9 +16,9 @@ const PartnerStrip = () => {
                   <img 
                     src={gsaLogo} 
                     alt="Google Student Ambassador Program" 
-                    className="h-6 w-auto object-contain transition-transform duration-300 group-hover:scale-110"
+                    className="h-5 sm:h-6 w-auto object-contain transition-transform duration-300 group-hover:scale-110"
                   />
-                  <span className="text-[11px] font-medium text-foreground/80">
+                  <span className="text-[10px] sm:text-[11px] font-medium text-foreground/80">
                     Google Student Ambassador
                   </span>
                 </div>
@@ -30,10 +28,6 @@ const PartnerStrip = () => {
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-          <span className="text-[10px] text-muted-foreground/40 mx-2">•</span>
-          <p className="text-[9px] text-muted-foreground/60">
-            © {currentYear} FOSS Club, ISE, PESCE Mandya
-          </p>
         </div>
       </div>
     </div>

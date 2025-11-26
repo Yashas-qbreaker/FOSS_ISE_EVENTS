@@ -24,11 +24,11 @@ const Index = () => {
             alt="ISE Logo" 
             className="h-14 w-14 md:h-20 md:w-20 object-contain transition-transform duration-500 hover:scale-110 hover:rotate-6" 
           />
-          <div className="text-center flex-1 px-4">
-            <p className="text-base md:text-lg lg:text-xl font-semibold text-foreground/90 tracking-wide transition-all duration-300 hover:text-foreground">
+          <div className="text-center flex-1 px-2 sm:px-4">
+            <p className="text-[10px] sm:text-xs md:text-lg lg:text-xl font-semibold text-foreground/90 tracking-wide transition-all duration-300 hover:text-foreground leading-tight">
               PES College of Engineering, Mandya
             </p>
-            <p className="text-xs md:text-sm lg:text-base text-muted-foreground uppercase tracking-wider transition-all duration-300 hover:text-accent">
+            <p className="text-[8px] sm:text-[9px] md:text-sm lg:text-base text-muted-foreground uppercase tracking-wider transition-all duration-300 hover:text-accent leading-tight">
               Department of ISE • FOSS Club
             </p>
           </div>

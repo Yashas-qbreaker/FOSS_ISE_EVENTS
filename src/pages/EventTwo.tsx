@@ -7,6 +7,7 @@ import {
   Users,
   Globe,
   Mail,
+  Send,
   CheckCircle,
   AlertCircle,
   ArrowRight,
@@ -78,15 +79,9 @@ const EventTwo = () => {
                       <p className="text-xs text-muted-foreground">PESCE Mandya</p>
                     </div>
                   </div>
-                  <a
-                    href="https://www.instagram.com/pesce_foss_club?igsh=MXVhOWIyeWZhaXRxMQ=="
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Button size="sm" variant="outline" className="h-8 text-xs">
-                      Follow
-                    </Button>
-                  </a>
+                  <Button size="sm" variant="outline" className="h-8 text-xs">
+                    Subscribe
+                  </Button>
                 </div>
               </div>
 
@@ -123,17 +118,6 @@ const EventTwo = () => {
                         ISE
                       </div>
                       <p className="text-sm font-medium text-foreground">ISE Department</p>
-                    </div>
-                    <button className="w-6 h-6 rounded-full hover:bg-background/60 flex items-center justify-center transition-colors">
-                      <X className="w-3 h-3 text-muted-foreground" />
-                    </button>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center text-white text-xs font-bold">
-                        GSA
-                      </div>
-                      <p className="text-sm font-medium text-foreground">Google Student Ambassador</p>
                     </div>
                     <button className="w-6 h-6 rounded-full hover:bg-background/60 flex items-center justify-center transition-colors">
                       <X className="w-3 h-3 text-muted-foreground" />
@@ -234,20 +218,14 @@ const EventTwo = () => {
                     <div className="flex items-center gap-3 mb-4">
                       <Link to="/register-blind-code-golf">
                         <Button size="sm" variant="outline" className="gap-2">
-                          <UserPlus className="w-4 h-4" />
-                          Register
+                          <Calendar className="w-4 h-4" />
+                          Register Now
                         </Button>
                       </Link>
-                      <a
-                        href="/blind%20code%20golf.pdf"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Button size="sm" variant="outline" className="gap-2">
-                          <BookOpen className="w-4 h-4" />
-                          Rule Book
-                        </Button>
-                      </a>
+                      <Button size="sm" variant="outline" className="gap-2">
+                        <Send className="w-4 h-4" />
+                        Invite a Friend
+                      </Button>
                     </div>
                     <p className="text-xs text-muted-foreground">
                       No longer able to attend?{" "}
@@ -260,6 +238,79 @@ const EventTwo = () => {
                 </div>
               </div>
 
+              {/* Location Section */}
+              <div className="glass-card p-6 rounded-2xl border border-border/50 backdrop-blur-xl bg-background/40">
+                <h2 className="text-xl font-heading font-semibold text-foreground mb-4">
+                  Location
+                </h2>
+                <div className="space-y-4">
+                  <div>
+                    <p className="text-sm font-medium text-foreground mb-1">
+                      PESCE Mandya Campus
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      PES College of Engineering, Mandya, Karnataka 571401, India
+                    </p>
+                  </div>
+                  {/* Google Maps Embed */}
+                  <div className="rounded-lg overflow-hidden border border-border/30">
+                    <iframe
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.1234567890123!2d76.8954!3d12.5236!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTLCsDMxJzI1LjAiTiA3NsKwNTMnNDMuNCJF!5e0!3m2!1sen!2sin!4v1234567890123!5m2!1sen!2sin&q=PES+College+of+Engineering+Mandya"
+                      width="100%"
+                      height="300"
+                      style={{ border: 0 }}
+                      allowFullScreen
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      className="w-full"
+                      title="PESCE Mandya Campus Location"
+                    />
+                  </div>
+                  <a
+                    href="https://maps.app.goo.gl/csftRugL7AQRvoDaA"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-sm text-accent hover:text-primary transition-colors"
+                  >
+                    <MapPin className="w-4 h-4" />
+                    View on Google Maps
+                  </a>
+                </div>
+              </div>
+
+              {/* Contact Section */}
+              <div className="glass-card p-6 rounded-2xl border border-border/50 backdrop-blur-xl bg-background/40">
+                <h2 className="text-xl font-heading font-semibold text-foreground mb-4">
+                  For Queries
+                </h2>
+                <div className="flex items-center gap-3">
+                  <Phone className="w-5 h-5 text-primary" />
+                  <div>
+                    <p className="text-sm font-medium text-foreground">Yashas Gowda A</p>
+                    <a
+                      href="tel:+919071265960"
+                      className="text-sm text-accent hover:text-primary transition-colors"
+                    >
+                      9071265960
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              {/* Get Ready Section */}
+              <div className="glass-card p-6 rounded-2xl border border-border/50 backdrop-blur-xl bg-background/40">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-sm font-semibold text-foreground mb-1">
+                      Get Ready for the Event
+                    </h3>
+                    <p className="text-xs text-muted-foreground">
+                      Profile Complete • Reminder: SMS & Email
+                    </p>
+                  </div>
+                  <ArrowRight className="w-4 h-4 text-muted-foreground" />
+                </div>
+              </div>
 
               {/* About Event */}
               <div className="glass-card p-6 md:p-8 rounded-2xl border border-border/50 backdrop-blur-xl bg-background/40">
@@ -334,67 +385,8 @@ const EventTwo = () => {
                       <AlertCircle className="w-4 h-4 text-destructive" />
                   No internet access allowed during the competition
                 </p>
-                  </div>
-                </div>
               </div>
-
-              {/* Location Section - Moved to end */}
-              <div className="glass-card p-4 rounded-2xl border border-border/50 backdrop-blur-xl bg-background/40">
-                <h2 className="text-lg font-heading font-semibold text-foreground mb-3">
-                  Location
-                </h2>
-                <div className="space-y-3">
-                  <div>
-                    <p className="text-sm font-medium text-foreground mb-1">
-                      PESCE Mandya Campus
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      PES College of Engineering, Mandya, Karnataka 571401, India
-                    </p>
-                  </div>
-                  {/* Google Maps Embed - Reduced size */}
-                  <div className="rounded-lg overflow-hidden border border-border/30">
-                    <iframe
-                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.1234567890123!2d76.8954!3d12.5236!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTLCsDMxJzI1LjAiTiA3NsKwNTMnNDMuNCJF!5e0!3m2!1sen!2sin!4v1234567890123!5m2!1sen!2sin&q=PES+College+of+Engineering+Mandya"
-                      width="100%"
-                      height="200"
-                      style={{ border: 0 }}
-                      allowFullScreen
-                      loading="lazy"
-                      referrerPolicy="no-referrer-when-downgrade"
-                      className="w-full"
-                      title="PESCE Mandya Campus Location"
-                    />
-                  </div>
-                  <a
-                    href="https://maps.app.goo.gl/csftRugL7AQRvoDaA"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-xs text-accent hover:text-primary transition-colors"
-                  >
-                    <MapPin className="w-3 h-3" />
-                    View on Google Maps
-                  </a>
-                </div>
-              </div>
-
-              {/* Contact Section - Moved to end */}
-              <div className="glass-card p-4 rounded-2xl border border-border/50 backdrop-blur-xl bg-background/40">
-                <h2 className="text-lg font-heading font-semibold text-foreground mb-3">
-                  For Queries
-                </h2>
-                <div className="flex items-center gap-3">
-                  <Phone className="w-4 h-4 text-primary" />
-                  <div>
-                    <p className="text-sm font-medium text-foreground">Yashas Gowda A</p>
-                    <a
-                      href="tel:+919071265960"
-                      className="text-sm text-accent hover:text-primary transition-colors"
-                    >
-                      9071265960
-                    </a>
-                  </div>
-                </div>
+            </div>
               </div>
             </main>
           </div>
@@ -416,15 +408,9 @@ const EventTwo = () => {
                     <p className="text-xs text-muted-foreground">PESCE Mandya</p>
                   </div>
                 </div>
-                <a
-                  href="https://www.instagram.com/pesce_foss_club?igsh=MXVhOWIyeWZhaXRxMQ=="
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button size="sm" variant="outline" className="h-8 text-xs">
-                    Follow
-                  </Button>
-                </a>
+                <Button size="sm" variant="outline" className="h-8 text-xs">
+                  Subscribe
+                </Button>
               </div>
             </div>
 
@@ -448,14 +434,6 @@ const EventTwo = () => {
                       ISE
                     </div>
                     <p className="text-sm font-medium text-foreground">ISE Department</p>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center text-white text-xs font-bold">
-                      GSA
-                    </div>
-                    <p className="text-sm font-medium text-foreground">Google Student Ambassador</p>
                   </div>
                 </div>
               </div>
