@@ -1,0 +1,141 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 218 24% 6%;
+    --foreground: 210 40% 95%;
+
+    --card: 218 20% 8%;
+    --card-foreground: 210 40% 95%;
+
+    --popover: 218 20% 8%;
+    --popover-foreground: 210 40% 95%;
+
+    --primary: 250 80% 65%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 218 20% 12%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 218 20% 12%;
+    --muted-foreground: 217 15% 55%;
+
+    --accent: 190 85% 60%;
+    --accent-foreground: 218 24% 6%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 218 20% 18%;
+    --input: 218 20% 18%;
+    --ring: 250 80% 65%;
+
+    --radius: 0.75rem;
+    
+    /* Custom theme colors */
+    --gradient-start: 250 80% 65%;
+    --gradient-mid: 270 75% 60%;
+    --gradient-end: 190 85% 60%;
+    
+    --glass-bg: 218 20% 12%;
+    --glass-border: 218 20% 25%;
+    
+    --neon-glow: 250 80% 65%;
+    
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 218 24% 6%;
+    --foreground: 210 40% 95%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading;
+  }
+}
+
+@layer utilities {
+  .glass-card {
+    @apply bg-glass-bg/40 backdrop-blur-xl border border-glass-border/50;
+  }
+  
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary via-[hsl(var(--gradient-mid))] to-accent bg-clip-text text-transparent;
+  }
+  
+  .neon-glow {
+    box-shadow: 0 0 20px hsl(var(--neon-glow) / 0.3), 
+                0 0 40px hsl(var(--neon-glow) / 0.15);
+  }
+  
+  .hover-lift {
+    transition: var(--transition-smooth);
+  }
+  
+  .hover-lift:hover {
+    transform: scale(1.02) translateY(-2px);
+  }
+
+  /* Animated gradient border pill for event CTA buttons */
+  .event-cta-wrapper {
+    position: relative;
+    border-radius: 9999px;
+    padding: 2px;
+    background: linear-gradient(
+      90deg,
+      hsl(var(--primary)),
+      hsl(var(--gradient-mid)),
+      hsl(var(--accent)),
+      hsl(var(--primary))
+    );
+    background-size: 200% 200%;
+    animation: event-cta-shift 4s linear infinite;
+  }
+
+  .event-cta-inner {
+    border-radius: 9999px;
+    background-color: hsl(var(--background));
+  }
+
+  @keyframes event-cta-shift {
+    0% {
+      background-position: 0% 50%;
+    }
+    100% {
+      background-position: 200% 50%;
+    }
+  }
+}
